@@ -1,8 +1,10 @@
 package org.pap.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HolaController {
@@ -13,8 +15,9 @@ public class HolaController {
 	}
 
 	@PostMapping("/hola")
-	public String holaPost() {
-		
+	public String holaPost(@RequestParam("name")String nombre,@RequestParam("surname")String surname, ModelMap data) {
+		data.put("name", nombre);
+		data.put("surname", surname);
 		return "view/hola/holaPost";
 	}
 	
