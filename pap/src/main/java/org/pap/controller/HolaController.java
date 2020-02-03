@@ -1,3 +1,4 @@
+
 package org.pap.controller;
 
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,11 @@ public class HolaController {
 	}
 
 	@PostMapping("/hola")
-	public String holaPost(@RequestParam("name")String nombre,@RequestParam("surname")String surname, ModelMap data) {
+	//recogemos parametro de formulario
+	public String holaPost(
+			@RequestParam("name")String nombre,
+			@RequestParam("surname")String surname, 
+			ModelMap data) {
 		data.put("name", nombre);
 		data.put("surname", surname);
 		return "view/hola/holaPost";
