@@ -1,0 +1,17 @@
+<div class="container">
+<h1>List of countries that are currently in the server</h1>
+
+<table class="table table-striped">
+<thead class="thead-dark">
+<tr>
+<th class="col">countries</th>
+</tr>
+</thead>
+
+<tr th:each=country:${countries}>
+<td th:text="${country.name}"></td>
+</tr>
+
+</table>
+
+</div>

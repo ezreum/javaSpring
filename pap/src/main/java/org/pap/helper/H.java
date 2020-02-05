@@ -3,7 +3,7 @@ package org.pap.helper;
 import javax.servlet.http.HttpSession;
 
 public class H {
-	public static void setMessage(HttpSession s, String mensaje, String severity, String link) {
+	public static void info(HttpSession s, String mensaje, String severity, String link) {
 		s.setAttribute("mensaje", mensaje);
 		s.setAttribute("severity", severity);
 		s.setAttribute("link", link);

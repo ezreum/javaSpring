@@ -18,9 +18,9 @@ public class Person {
 	private String name;
 	@ManyToOne
 	private Country born;
-	
+	@ManyToMany
 	private Collection<Hobby> likedThings;
-	
+	@ManyToMany
 	private Collection<Hobby> hatedThings;
 	
 	//===================

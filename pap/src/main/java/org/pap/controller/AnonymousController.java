@@ -55,7 +55,7 @@ public class AnonymousController {
 		m.put("severity", severity);
 		m.put("link", link);
 
-		m.put("rutaAVista", "/_t/info");
+		m.put("view", "/_t/info");
 		return "/_t/frame";
 	}
 

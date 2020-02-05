@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HolaController {
 	
 	@GetMapping("/hola")
-	public String holaGet() {
-		return "view/hola/hola";
+	public String holaGet(ModelMap data) {
+		data.put("view", "view/hola/hola");
+		return "_t/frame";
 	}
 
 	@PostMapping("/hola")
@@ -23,7 +24,9 @@ public class HolaController {
 			ModelMap data) {
 		data.put("name", nombre);
 		data.put("surname", surname);
-		return "view/hola/holaPost";
+		
+		data.put("view", "view/hola/holaPost");
+		return "_t/frame";
 	}
 	
 	
