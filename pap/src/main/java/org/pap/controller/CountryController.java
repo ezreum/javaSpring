@@ -28,7 +28,7 @@ public class CountryController {
 	
 	@GetMapping("/country/create")
 	public String createGet() {
-		return"view/country/create";
+		return"/view/country/create";
 	}
 	
 	@PostMapping("/country/createPost")
@@ -37,9 +37,23 @@ public class CountryController {
 		Country country = new Country();
 		country.setName(name);
 		repoCountry.save(country);
-		return"view/country/createPost";
+		return"/view/country/createPost";
 	}
 	
+	
+	
+	
+	
+	
+	@PostMapping("/country/delete")
+	public String Delete(@RequestParam("id")Long identifier) {
+		if (identifier!=null) {
+		Country country = repoCountry.getOne(identifier);
+		repoCountry.delete(country);
+		}
+		return "";
+	}
+
 }
 
 	
