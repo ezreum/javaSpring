@@ -9,15 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping(value = "/country")
 public class CountryController {
 	
 	@Autowired
 	private RepositoryCountry repoCountry;
 	
-	@GetMapping("/country")
+	@GetMapping("")
 	public String read(ModelMap data) {
 		List<Country>countries = repoCountry.findAll();
 		data.put("countries", countries);
@@ -26,26 +28,19 @@ public class CountryController {
 		return "_t/frame";
 	}
 	
-	@GetMapping("/country/create")
+	@GetMapping("/create")
 	public String createGet() {
 		return"/view/country/create";
 	}
 	
-	@PostMapping("/country/createPost")
+	@PostMapping("/createPost")
 	public String createPost(
 			@RequestParam("name")String name) {
-		Country country = new Country();
-		country.setName(name);
-		repoCountry.save(country);
+		repoCountry.save(new Country(name));
 		return"/view/country/createPost";
 	}
 	
-	
-	
-	
-	
-	
-	@PostMapping("/country/delete")
+	@PostMapping("/delete")
 	public String Delete(@RequestParam("id")Long identifier) {
 		if (identifier!=null) {
 		Country country = repoCountry.getOne(identifier);

@@ -27,6 +27,11 @@ public class Country {
 		this.areBorn = new ArrayList<Person>();
 	}
 
+	public Country(String name) {
+		this.name=name;
+		this.areBorn = new ArrayList<Person>();
+	}
+	
 
 	public Long getId() {
 		return id;
