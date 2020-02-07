@@ -38,10 +38,28 @@ public class CountryController {
 	
 	@PostMapping("/createPost")
 	public String createPost(
-			@RequestParam("name")String name) {
-		repoCountry.save(new Country(name));
-		return"/view/country/createPost";
+			@RequestParam("name")String name, HttpSession s) {
+		try {
+			repoCountry.save(new Country(name));
+			H.info(s, "Country "+name+" created correctly", "info", "/country");
+		} catch (Exception e) {
+			H.info(s, "Country "+name+" duplicated", "danger", "/country");
+		}
+		
+		return "redirect:/info";
 	}
+	
+	@GetMapping("/update")
+	public String update(
+			@RequestParam("id")Long id,
+			ModelMap m) {
+		Country country = repoCountry.getOne(id);
+		m.put("country", country);
+		
+		m.put("view", "/view/country/update");
+		return "_t/frame";
+	}
+	
 	
 	@PostMapping("/delete")
 	public String Delete(@RequestParam("id")Long identifier, HttpSession s) {
