@@ -5,6 +5,7 @@
 <thead class="thead-dark">
 <tr>
 <th class="col">countries</th>
+<th class="col">actions</th>
 </tr>
 </thead>
 
@@ -13,14 +14,14 @@
 
 
 <td>
-<form>
+<form action="/country/update" method="GET">
 <input type="hidden" name="id" th:value="${country.id}"/>
 <button type="submit">
 <img alt="edit" src="/assets/img/edit.png" width="50px"/>
 </button>
 </form>
 
-<form>
+<form action="/country/delete" method="POST">
 <input type="hidden" name="id" th:value="${country.id}"/>
 <button type="submit">
 <img alt="delete" src="/assets/img/delete.png" width="50px"/>

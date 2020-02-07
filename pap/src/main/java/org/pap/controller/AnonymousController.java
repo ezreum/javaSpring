@@ -36,7 +36,7 @@ public class AnonymousController {
 
 	@GetMapping("/")
 	public String home(ModelMap m) {
-		m.put("rutaAVista", "/anonymous/home");
+		m.put("view", "/anonymous/home");
 		return "/_t/frame";
 	}
 
