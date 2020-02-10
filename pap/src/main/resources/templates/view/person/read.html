@@ -1,0 +1,44 @@
+<div class="container">
+<h1>List of persons that are currently in the server</h1>
+
+<table class="table table-striped">
+<thead class="thead-light">
+<tr>
+<th class="col">person</th>
+<th>birthplace</th>
+<th>liked things</th>
+<th>hated things</th>
+<th class="col">actions</th>
+</tr>
+</thead>
+
+<tr th:each=person:${people}>
+<td th:text="${person.name}"></td>
+
+<td th.text="${person.country.name}"></td>
+
+
+<td>a</td>
+<td>a</td>
+
+<td>
+<form action="/country/update" method="GET">
+<input type="hidden" name="id" th:value="${country.id}"/>
+<button type="submit">
+<img alt="edit" src="/assets/img/edit.png" width="50px"/>
+</button>
+</form>
+
+<form action="/country/delete" method="POST">
+<input type="hidden" name="id" th:value="${country.id}"/>
+<button type="submit">
+<img alt="delete" src="/assets/img/delete.png" width="50px"/>
+</button>
+</form>
+
+</td>
+</tr>
+
+</table>
+
+</div>

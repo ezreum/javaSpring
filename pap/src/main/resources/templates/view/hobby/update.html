@@ -1,0 +1,16 @@
+<div class="container">
+	
+	<h1>Update user</h1>
+	<div class="row mt-5">
+		<form action="/hobby/update" method="POST">
+		<label class="col-form-label-lg col-sm-2" for="hobby">name</label>
+		<input class="form-control-lg" type="text" id="hobby" name="name" th:value="${hobby.name}"/>
+		<input type="hidden" name="id" th:value="${hobby.id}" />
+		<input type="submit"/>
+		</form>
+	
+	
+	</div>
+	
+
+</div>

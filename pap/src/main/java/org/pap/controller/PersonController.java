@@ -29,6 +29,16 @@ public class PersonController {
 	@Autowired
 	private RepositoryHobby repoHobby;
 	
+	
+	@GetMapping("")
+	public String read(ModelMap m) {
+		List<Person> people=repoPerson.findAll();
+		m.put("people", people);
+		
+		m.put("view", "/view/person/read");
+		return "/_t/frame";
+	}
+	
 	@GetMapping("/create")
 	public String create(ModelMap m) {
 		List<Country> country = repoCountry.findAll();
