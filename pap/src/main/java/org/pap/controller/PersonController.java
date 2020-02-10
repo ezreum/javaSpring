@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.pap.domain.Country;
 import org.pap.domain.Hobby;
 import org.pap.domain.Person;
+import org.pap.helper.H;
 import org.pap.repositories.RepositoryCountry;
 import org.pap.repositories.RepositoryHobby;
 import org.pap.repositories.RepositoryPerson;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -49,6 +51,31 @@ public class PersonController {
 		m.put("view", "/view/person/create");
 		return "_t/frame";
 	}
+	
+	@PostMapping("/create")
+	public String create(
+			@RequestParam("name")String name,
+			@RequestParam("nick")String nick,
+			@RequestParam("password")String pwd,
+			@RequestParam("born")String born,
+			@RequestParam(value = "likedHobbies[]", required=false)List<Hobby> likedHobbies[],
+			@RequestParam(value = "hatedHobbies[]", required=false)List<Hobby> hatedHobbies[],
+			HttpSession s,
+			ModelMap m
+			) {
+		String route="/person";
+		
+		
+		try {
+			repoPerson.save(new Person());
+			H.info(s, "person named "+name+" has been successfully created", "success", route);
+		} catch (Exception e) {
+			H.info(s, "person named "+name+" hasn't been properly created", "danger", route);
+		}
+		return "redirect:/info";
+	}
+	
+	
 	
 	public String update(
 			@RequestParam("id")Long id,
