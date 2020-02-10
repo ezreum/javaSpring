@@ -32,11 +32,13 @@ public class CountryController {
 	}
 	
 	@GetMapping("/create")
-	public String createGet() {
-		return"/view/country/create";
+	public String createGet(ModelMap s) {
+		
+		s.put("view", "/view/country/create");
+		return"/_t/frame";
 	}
 	
-	@PostMapping("/createPost")
+	@PostMapping("/create")
 	public String createPost(
 			@RequestParam("name")String name, HttpSession s) {
 		try {
@@ -58,6 +60,23 @@ public class CountryController {
 		
 		m.put("view", "/view/country/update");
 		return "_t/frame";
+	}
+	
+	@PostMapping("/update")
+	public String update(
+			@RequestParam("name")String name,
+			@RequestParam("id")Long id,
+			ModelMap m,
+			HttpSession s) {
+			Country country = repoCountry.getOne(id);	
+			try {
+				country.setName(name);
+				repoCountry.save(country);
+			H.info(s, "country "+name+" has been updated", "success", "/country");
+			} catch (Exception e) {
+			H.info(s, "The selected country "+name+" hasn't been sucessfully updated", "danger", "/country");	
+			}
+			return "redirect:/info";
 	}
 	
 	

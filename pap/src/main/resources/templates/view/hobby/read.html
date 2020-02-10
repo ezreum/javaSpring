@@ -1,0 +1,36 @@
+<div class="container">
+<h1>List of hobbies that are currently in the server</h1>
+
+<table class="table table-striped">
+<thead class="thead-dark">
+<tr>
+<th class="col">hobbies</th>
+<th class="col">actions</th>
+</tr>
+</thead>
+
+<tr th:each=hobby:${hobbies}>
+<td th:text="${hobby.name}"></td>
+
+
+<td>
+<form action="/hobby/update" method="GET">
+<input type="hidden" name="id" th:value="${hobby.id}"/>
+<button type="submit">
+<img alt="edit" src="/assets/img/edit.png" width="50px"/>
+</button>
+</form>
+
+<form action="/hobby/delete" method="POST">
+<input type="hidden" name="id" th:value="${hobby.id}"/>
+<button type="submit">
+<img alt="delete" src="/assets/img/delete.png" width="50px"/>
+</button>
+</form>
+
+</td>
+</tr>
+
+</table>
+
+</div>

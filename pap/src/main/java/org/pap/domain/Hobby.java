@@ -31,6 +31,11 @@ public class Hobby {
 	}
 
 
+	public Hobby(String name) {
+	this.name=name;
+	}
+
+
 	public Long getId() {
 		return id;
 	}

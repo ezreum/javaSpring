@@ -1,10 +1,13 @@
 <div class="container">
 
 	<h1>Edit Country</h1>
-	<form>
-	<label for="countryN">name</label>
-	<input type="text" id="countryN" th:value="${country.name}"/>
+	<form action="/country/update" method="POST">
+	<div class="row mt-5">
+	<label class="col-form-label-lg col-sm-1" for="countryN">name</label>
+	<input class="form-control-lg" type="text" id="countryN" name="name" th:value="${country.name}"/>
+	<input type="hidden" name="id" th:value="${country.id}" />
 	<input type="submit"/>
+	</div>
 	</form>
 
 </div>
