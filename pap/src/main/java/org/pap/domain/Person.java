@@ -3,6 +3,7 @@ package org.pap.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,12 @@ public class Person {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	
+	@Column(unique = true)
+	private String nick;
+	
+	private String pwd;
+	
 	@ManyToOne
 	private Country born;
 	@ManyToMany
@@ -67,6 +74,22 @@ public class Person {
 
 	public void setHatedThings(Collection<Hobby> hatedThings) {
 		this.hatedThings = hatedThings;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
 	}
 	
 	
