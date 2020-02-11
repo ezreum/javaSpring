@@ -2,6 +2,7 @@ package org.pap.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -38,9 +40,12 @@ public class Person {
 		this.hatedThings = new ArrayList<Hobby>();
 	}
 	
-	public Person(String name, String pass) {
+	public Person(String name,String pass, String nick, String bornC) {
 		this.name=name;
+		this.nick=nick;
 		this.pwd = (new BCryptPasswordEncoder()).encode(pass);
+		this.likedThings=new ArrayList<Hobby>();
+		this.hatedThings=new ArrayList<Hobby>();
 	}
 
 	public Long getId() {

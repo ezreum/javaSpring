@@ -1,5 +1,7 @@
 package org.pap.controller;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -58,8 +60,8 @@ public class PersonController {
 			@RequestParam("nick")String nick,
 			@RequestParam("password")String pwd,
 			@RequestParam("born")String born,
-			@RequestParam(value = "likedHobbies[]", required=false)List<Hobby> likedHobbies[],
-			@RequestParam(value = "hatedHobbies[]", required=false)List<Hobby> hatedHobbies[],
+			@RequestParam(value = "likedHobbies[]", required=false)List<Long> likedHobbies,
+			@RequestParam(value = "hatedHobbies[]", required=false)List<Long> hatedHobbies,
 			HttpSession s,
 			ModelMap m
 			) {
@@ -67,7 +69,26 @@ public class PersonController {
 		
 		
 		try {
-			repoPerson.save(new Person());
+			
+			Person person = new Person(name,nick,pwd,born);
+			
+			likedHobbies = (likedHobbies == null?new ArrayList<Long>():likedHobbies);
+			hatedHobbies = (hatedHobbies == null?new ArrayList<Long>():hatedHobbies);
+			
+			for (Long idHobby : likedHobbies) {
+				Hobby hobby = repoHobby.getOne(idHobby);
+				hobby.getPeopleWhoLiked().add(person);
+				person.getLikedThings().add(hobby);
+			}
+			
+			for (Long idHobby : hatedHobbies) {
+				Hobby hobby= repoHobby.getOne(idHobby);
+				hobby.getPeopleWhoHate().add(person);
+				person.getHatedThings().add(hobby);
+			}
+			
+			repoPerson.save(person);
+			
 			H.info(s, "person named "+name+" has been successfully created", "success", route);
 		} catch (Exception e) {
 			H.info(s, "person named "+name+" hasn't been properly created", "danger", route);
