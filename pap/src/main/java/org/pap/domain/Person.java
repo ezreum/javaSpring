@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Entity
 public class Person {
 	@Id
@@ -34,6 +36,11 @@ public class Person {
 	public Person() {
 		this.likedThings = new ArrayList<Hobby>();
 		this.hatedThings = new ArrayList<Hobby>();
+	}
+	
+	public Person(String name, String pass) {
+		this.name=name;
+		this.pwd = (new BCryptPasswordEncoder()).encode(pass);
 	}
 
 	public Long getId() {
