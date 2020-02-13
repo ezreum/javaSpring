@@ -18,25 +18,29 @@
 <td th.text="${person.country.name}"></td>
 
 
-<td>a</td>
+<td >
+
+</td>
+
 <td>a</td>
 
 <td>
-<form action="/country/update" method="GET">
-<input type="hidden" name="id" th:value="${country.id}"/>
+<form action="/person/update" method="GET">
+<input type="hidden" name="id" th:value="${person.id}"/>
 <button type="submit">
 <img alt="edit" src="/assets/img/edit.png" width="50px"/>
 </button>
 </form>
 
-<form action="/country/delete" method="POST">
-<input type="hidden" name="id" th:value="${country.id}"/>
+<form action="/person/delete" method="POST">
+<input type="hidden" name="id" th:value="${person.id}"/>
 <button type="submit">
 <img alt="delete" src="/assets/img/delete.png" width="50px"/>
 </button>
 </form>
 
 </td>
+
 </tr>
 
 </table>

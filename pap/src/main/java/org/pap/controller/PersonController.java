@@ -47,8 +47,8 @@ public class PersonController {
 	public String create(ModelMap m) {
 		List<Country> country = repoCountry.findAll();
 		m.put("countries", country);
-		List<Hobby> hobby= repoHobby.findAll();
-		m.put("hobbies", hobby);
+		List<Hobby> hobbies= repoHobby.findAll();
+		m.put("hobbies", hobbies);
 		
 		m.put("view", "/view/person/create");
 		return "_t/frame";
@@ -136,9 +136,22 @@ public class PersonController {
 			// TODO: handle exception
 		}
 		
-		
-		
-		
+	}
+	
+	
+	public String delete(
+			@RequestParam("id")Long id,
+			HttpSession s
+			) {
+		Person person = repoPerson.getOne(id);
+		String name = person.getName();
+		try {
+			repoPerson.delete(person);
+			H.info(s, "person named "+name+" has been sucessfully erased", "success", "/person" );
+		} catch (Exception e) {
+			H.info(s, "person named "+name+" has been sucessfully erased", "success", "/person");
+		}
+		return "redirect:/info";
 	}
 	
 	
