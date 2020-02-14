@@ -12,17 +12,19 @@
 </tr>
 </thead>
 
-<tr th:each=person:${people}>
+<tr th:each="person:${people}">
 <td th:text="${person.name}"></td>
 
-<td th.text="${person.country.name}"></td>
+<td th:text="${person.born.name}"></td>
 
 
-<td >
-
+<td th:each="hobby:${person.likedThings}">
+<span th:text="${hobby.name}"></span>
 </td>
 
-<td>a</td>
+<td th:each="hobby:${person.hatedThings}">
+<span th:text="${hobby.name}"></span>
+</td>
 
 <td>
 <form action="/person/update" method="GET">

@@ -40,7 +40,7 @@ public class Person {
 		this.hatedThings = new ArrayList<Hobby>();
 	}
 	
-	public Person(String name,String pass, String nick, String bornC) {
+	public Person(String name,String pass, String nick) {
 		this.name=name;
 		this.nick=nick;
 		this.pwd = (new BCryptPasswordEncoder()).encode(pass);

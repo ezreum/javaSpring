@@ -59,7 +59,7 @@ public class PersonController {
 			@RequestParam("name")String name,
 			@RequestParam("nick")String nick,
 			@RequestParam("password")String pwd,
-			@RequestParam("born")String born,
+			@RequestParam("born")Long born,
 			@RequestParam(value = "likedHobbies[]", required=false)List<Long> likedHobbies,
 			@RequestParam(value = "hatedHobbies[]", required=false)List<Long> hatedHobbies,
 			HttpSession s,
@@ -70,8 +70,10 @@ public class PersonController {
 		
 		try {
 			
-			Person person = new Person(name,nick,pwd,born);
-			
+			Country country = repoCountry.getOne(born);
+			Person person = new Person(name,nick,pwd);
+			country.getAreBorn().add(person);
+			person.setBorn(country);
 			likedHobbies = (likedHobbies == null?new ArrayList<Long>():likedHobbies);
 			hatedHobbies = (hatedHobbies == null?new ArrayList<Long>():hatedHobbies);
 			
@@ -138,7 +140,7 @@ public class PersonController {
 		
 	}
 	
-	
+	@PostMapping("/delete")
 	public String delete(
 			@RequestParam("id")Long id,
 			HttpSession s
