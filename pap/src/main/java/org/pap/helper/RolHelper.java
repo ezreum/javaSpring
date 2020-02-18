@@ -16,13 +16,13 @@ public class RolHelper {
 				}
 			}
 			else if (person != null) {
-				if ( !person.getName().equals("admin") && rol.equals("admin") ) {
+				if ( !person.getNick().equals("admin") && rol.equals("admin") ) {
 					
 				}
-			} 
 			else {
+				System.out.println("aa");
 				
-				
+			}
 			}
 	}
 }
