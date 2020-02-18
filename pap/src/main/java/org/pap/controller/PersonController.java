@@ -99,7 +99,7 @@ public class PersonController {
 	}
 	
 	
-	
+	@GetMapping("/update")
 	public String update(
 			@RequestParam("id")Long id,
 			ModelMap s) {
