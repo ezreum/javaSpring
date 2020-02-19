@@ -134,6 +134,10 @@ public class PersonController {
 			country.getAreBorn().add(person);
 			person.setBorn(country);
 			
+			for (Long long1 : liked) {
+				Hobby hobby = repoHobby.getOne(long1);
+			}
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
