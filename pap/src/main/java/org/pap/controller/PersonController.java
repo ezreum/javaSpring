@@ -2,6 +2,7 @@ package org.pap.controller;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -111,11 +112,11 @@ public class PersonController {
 		return "_t/frame";
 	}
 	
-	
-	public void updatePostBorr(
+	@PostMapping("/update")
+	public String updatePostBorr(
 			@RequestParam("id")Long id,
 			@RequestParam("name")String name,
-			@RequestParam("idP")Long idCountry,
+			@RequestParam("born")Long idCountry,
 			@RequestParam(value="likedThings[]", required=false) List<Long> liked,
 			@RequestParam(value="hatedThings[]", required=false) List<Long> hated,
 			HttpSession s
@@ -129,19 +130,40 @@ public class PersonController {
 			Country country = repoCountry.getOne(idCountry);
 			
 			country.getAreBorn().remove(person);
-			person.setBorn(null);;
+			person.setBorn(null);
 			
 			country.getAreBorn().add(person);
 			person.setBorn(country);
 			
-			for (Long long1 : liked) {
-				Hobby hobby = repoHobby.getOne(long1);
+			
+			
+			 Collection<Hobby> hobbyLiked = new ArrayList<Hobby>(); 
+			 for (Long long1 : liked) { 
+				 Hobby hobby = repoHobby.getOne(long1);
+				 hobby.getPeopleWhoLiked().add(person);
+				 hobbyLiked.add(hobby); 
 			}
+			 person.setLikedThings(hobbyLiked);
+			  
+			 /*
+			 
+			 Collection<Hobby> hobbyHated = new ArrayList<Hobby>(); 
+			 for (Long long1 : liked) { 
+				 Hobby hobby = repoHobby.getOne(long1);
+				 hobby.getPeopleWhoHate().add(person);
+				 hobbyLiked.add(hobby); 
+			}
+			 person.setHatedThings(hobbyHated);
+			 */
+			
+			repoPerson.save(person);
+			
+			H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
 		}
-		
+		return "redirect:/info";
 	}
 	
 	@PostMapping("/delete")
