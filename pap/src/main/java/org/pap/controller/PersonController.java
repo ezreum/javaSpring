@@ -1,12 +1,14 @@
 package org.pap.controller;
 
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.connector.Response;
 import org.pap.domain.Country;
 import org.pap.domain.Hobby;
 import org.pap.domain.Person;
@@ -135,33 +137,39 @@ public class PersonController {
 			country.getAreBorn().add(person);
 			person.setBorn(country);
 			
-			
-			
-			 Collection<Hobby> hobbyLiked = new ArrayList<Hobby>(); 
-			 for (Long long1 : liked) { 
-				 Hobby hobby = repoHobby.getOne(long1);
-				 hobby.getPeopleWhoLiked().add(person);
-				 hobbyLiked.add(hobby); 
-			}
-			 person.setLikedThings(hobbyLiked);
-			  
-			 /*
-			 
-			 Collection<Hobby> hobbyHated = new ArrayList<Hobby>(); 
-			 for (Long long1 : liked) { 
-				 Hobby hobby = repoHobby.getOne(long1);
-				 hobby.getPeopleWhoHate().add(person);
-				 hobbyLiked.add(hobby); 
-			}
-			 person.setHatedThings(hobbyHated);
+			/*
+			 * for (Long long1: liked) { Hobby hobby = repoHobby.getOne(long1);
+			 * hobby.getPeopleWhoLiked().remove(person);
+			 * person.getLikedThings().remove(hobby); }
 			 */
+			
+			liked = (liked == null ? new ArrayList<Long>() : liked);
+			hated = (hated == null ? new ArrayList<Long>() : hated);
+
+			// Creo nueva colección de gustos nuevos y la sustituyo por la antigua
+			
+			 List<Hobby> likedHobbies = new ArrayList<Hobby>();
+			 	for (Long idliked : liked) { 
+			 		Hobby hobby = repoHobby.getOne(idliked);
+			 		hobby.getPeopleWhoLiked().add(person);
+			 		likedHobbies.add(hobby);
+			}
+			  person.setLikedThings(likedHobbies);
+			 
+			 List<Hobby> hatedHobbies = new ArrayList<Hobby>();
+				for (Long long1 : hated) { 
+					Hobby hobby = repoHobby.getOne(long1);
+					hobby.getPeopleWhoHate().add(person);
+					hatedHobbies.add(hobby);
+				}
+				 person.setHatedThings(hatedHobbies);
 			
 			repoPerson.save(person);
 			
-			H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
+			//H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
 			
 		} catch (Exception e) {
-			H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
+			//H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
 		}
 		return "redirect:/info";
 	}
