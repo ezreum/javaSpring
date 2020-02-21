@@ -29,11 +29,15 @@ public class Hobby {
 		this.peopleWhoLike = new ArrayList<Person>();
 		this.peopleWhoHate = new ArrayList<Person>();
 	}
+	
 
 
 	public Hobby(String name) {
 	this.name=name;
+	this.peopleWhoLike = new ArrayList<Person>();
+	this.peopleWhoHate = new ArrayList<Person>();	
 	}
+
 
 
 	public Long getId() {
@@ -41,9 +45,11 @@ public class Hobby {
 	}
 
 
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 
 	public String getName() {
@@ -51,19 +57,23 @@ public class Hobby {
 	}
 
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
 
-	public Collection<Person> getPeopleWhoLiked() {
+
+	public Collection<Person> getPeopleWhoLike() {
 		return peopleWhoLike;
 	}
 
 
-	public void setPeopleWhoLiked(Collection<Person> peopleWhoLiked) {
-		this.peopleWhoLike = peopleWhoLiked;
+
+	public void setPeopleWhoLike(Collection<Person> peopleWhoLike) {
+		this.peopleWhoLike = peopleWhoLike;
 	}
+
 
 
 	public Collection<Person> getPeopleWhoHate() {
@@ -71,10 +81,12 @@ public class Hobby {
 	}
 
 
+
 	public void setPeopleWhoHate(Collection<Person> peopleWhoHate) {
 		this.peopleWhoHate = peopleWhoHate;
 	}
-	
-	
+
+
+
 	
 	}

@@ -64,6 +64,22 @@ public class Person {
 		this.name = name;
 	}
 
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
 	public Country getBorn() {
 		return born;
 	}
@@ -88,22 +104,6 @@ public class Person {
 		this.hatedThings = hatedThings;
 	}
 
-	public String getNick() {
-		return nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
-	public String getPwd() {
-		return pwd;
-	}
-
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-	
 	
 	
 }

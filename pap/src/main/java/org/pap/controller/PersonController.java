@@ -82,7 +82,7 @@ public class PersonController {
 			
 			for (Long idHobby : likedHobbies) {
 				Hobby hobby = repoHobby.getOne(idHobby);
-				hobby.getPeopleWhoLiked().add(person);
+				hobby.getPeopleWhoLike().add(person);
 				person.getLikedThings().add(hobby);
 			}
 			
@@ -119,19 +119,20 @@ public class PersonController {
 			@RequestParam("id")Long id,
 			@RequestParam("name")String name,
 			@RequestParam("born")Long idCountry,
-			@RequestParam(value="likedThings[]", required=false) List<Long> liked,
-			@RequestParam(value="hatedThings[]", required=false) List<Long> hated,
+			@RequestParam(value="likedHobbies[]", required=false) List<Long> liked,
+			@RequestParam(value="hatedHobbies[]", required=false) List<Long> hated,
 			HttpSession s
 			) {
 		try {
-			
+			liked = (liked == null ? new ArrayList<Long>() : liked);
+			hated = (hated == null ? new ArrayList<Long>() : hated);
 			
 			Person person = repoPerson.getOne(id);
 			person.setName(name);
 			
 			Country country = repoCountry.getOne(idCountry);
 			
-			country.getAreBorn().remove(person);
+			//country.getAreBorn().remove(person);
 			person.setBorn(null);
 			
 			country.getAreBorn().add(person);
@@ -140,36 +141,35 @@ public class PersonController {
 			/*
 			 * for (Long long1: liked) { Hobby hobby = repoHobby.getOne(long1);
 			 * hobby.getPeopleWhoLiked().remove(person);
-			 * person.getLikedThings().remove(hobby); }
+			 * person.getLikedThings().remove(  person.setLikedThings(likedHobbies);hobby); }
 			 */
 			
-			liked = (liked == null ? new ArrayList<Long>() : liked);
-			hated = (hated == null ? new ArrayList<Long>() : hated);
+
 
 			// Creo nueva colección de gustos nuevos y la sustituyo por la antigua
 			
 			 List<Hobby> likedHobbies = new ArrayList<Hobby>();
 			 	for (Long idliked : liked) { 
 			 		Hobby hobby = repoHobby.getOne(idliked);
-			 		hobby.getPeopleWhoLiked().add(person);
+			 	//	hobby.getPeopleWhoLiked().add(person);
 			 		likedHobbies.add(hobby);
 			}
 			  person.setLikedThings(likedHobbies);
 			 
-			 List<Hobby> hatedHobbies = new ArrayList<Hobby>();
+			  List<Hobby> hatedHobbies = new ArrayList<Hobby>();
 				for (Long long1 : hated) { 
 					Hobby hobby = repoHobby.getOne(long1);
-					hobby.getPeopleWhoHate().add(person);
+				//	hobby.getPeopleWhoHate().add(person);
 					hatedHobbies.add(hobby);
 				}
 				 person.setHatedThings(hatedHobbies);
 			
 			repoPerson.save(person);
 			
-			//H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
+			H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
 			
 		} catch (Exception e) {
-			//H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
+			H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
 		}
 		return "redirect:/info";
 	}
