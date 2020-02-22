@@ -18,12 +18,12 @@
 <td th:text="${person.born.name}"></td>
 
 
-<td th:each="hobby:${person.likedThings}">
-<span th:block th:text="${hobby.name}"></span>
+<td>
+<span th:block th:each="hobby:${person.likedThings}" th:text="|${hobby.name} |"></span>
 </td>
 
-<td th:each="hobby:${person.hatedThings}">
-<span th:block th:text="${hobby.name}"></span>
+<td>
+<span th:block th:each="hobby:${person.hatedThings}" th:text="|${hobby.name} |"></span>
 </td>
 
 <td>

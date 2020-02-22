@@ -17,7 +17,8 @@ public class H {
 	
 	public static void info(HttpSession s, String mensaje) {
 		s.setAttribute("mensaje", mensaje);
-		s.setAttribute("severity", "/");
+		s.setAttribute("severity", "info");
+		s.setAttribute("link", "/");
 	}
 
 }

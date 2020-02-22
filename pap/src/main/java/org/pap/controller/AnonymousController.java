@@ -60,6 +60,10 @@ public class AnonymousController {
 		return "/_t/frame";
 	}
 	
+	@GetMapping("/login")
+	public String login() {
+		return "redirect:/person/create";
+	}
 
 
 }
