@@ -20,6 +20,11 @@
 		</div>
 		
 		<div class="form-group">
+		<label class="col-form-label-lg col-sm-4" >birth date</label>
+		<input class="form-control-lg" type="date" name="birthdate" required="required"/>
+		</div>
+		
+		<div class="form-group">
 		<label>birthplace</label>
 		<select name="born">
 		<option th:each="country:${countries}" th:text="${country.name}" th:value="${country.id}"> </option>

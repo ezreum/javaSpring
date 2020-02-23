@@ -4,13 +4,16 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 
-
+import org.pap.domain.Person;
+import org.pap.helper.H;
 import org.pap.repositories.RepositoryCountry;
 import org.pap.repositories.RepositoryHobby;
 import org.pap.repositories.RepositoryPerson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,7 @@ public class AnonymousController {
 
 
 	@Autowired
-	private RepositoryPerson repoUsuario;
+	private RepositoryPerson repoPerson;
 
 	@Autowired
 	private RepositoryCountry repoPais;
@@ -61,9 +64,35 @@ public class AnonymousController {
 	}
 	
 	@GetMapping("/login")
-	public String login() {
-		return "redirect:/person/create";
+	public String login(ModelMap m) {
+		
+		m.put("view", "/view/anonymous/login");
+		return "/_t/frame";
+	}
+	
+	@PostMapping("/login")
+	public String login(ModelMap m,
+			@RequestParam("nick")String nick,
+			@RequestParam("pwd")String pwd,
+			HttpSession s
+			) throws Exception {
+		String route = "/";
+		Person person = repoPerson.findByNick(nick);
+		try {
+			if( !new BCryptPasswordEncoder().matches(pwd, person.getPwd()) ) {
+				throw new Exception("Contraseña o nick incorrectos");
+			}
+			s.setAttribute("person", person);
+			
+		}catch (EntityNotFoundException e) {
+			H.info(s, e.getMessage(), "warning", "/login");
+			route="/info";
+		}
+		
+		
+		return "redirect:"+route;
 	}
 
-
+	
+	
 }

@@ -2,6 +2,7 @@ package org.pap.controller;
 
 
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.pap.repositories.RepositoryCountry;
 import org.pap.repositories.RepositoryHobby;
 import org.pap.repositories.RepositoryPerson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +64,10 @@ public class PersonController {
 			@RequestParam("name")String name,
 			@RequestParam("nick")String nick,
 			@RequestParam("password")String pwd,
-			@RequestParam("born")Long born,
+			@RequestParam(value="birthdate", required=false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			LocalDate birthdate,
+			@RequestParam(value="born", required=false)Long born,
 			@RequestParam(value = "likedHobbies[]", required=false)List<Long> likedHobbies,
 			@RequestParam(value = "hatedHobbies[]", required=false)List<Long> hatedHobbies,
 			HttpSession s,
@@ -74,7 +79,7 @@ public class PersonController {
 		try {
 			
 			Country country = repoCountry.getOne(born);
-			Person person = new Person(name,nick,pwd);
+			Person person = new Person(name,nick,pwd,birthdate);
 			country.getAreBorn().add(person);
 			person.setBorn(country);
 			likedHobbies = (likedHobbies == null?new ArrayList<Long>():likedHobbies);
@@ -118,6 +123,9 @@ public class PersonController {
 	public String updatePostBorr(
 			@RequestParam("id")Long id,
 			@RequestParam("name")String name,
+			@RequestParam(value="birthdate", required=false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+			LocalDate birthdate,
 			@RequestParam("born")Long idCountry,
 			@RequestParam(value="likedHobbies[]", required=false) List<Long> liked,
 			@RequestParam(value="hatedHobbies[]", required=false) List<Long> hated,
@@ -130,6 +138,7 @@ public class PersonController {
 			Person person = repoPerson.getOne(id);
 			person.setName(name);
 			
+			person.setBirthdate(birthdate);
 			Country country = repoCountry.getOne(idCountry);
 			
 			//country.getAreBorn().remove(person);

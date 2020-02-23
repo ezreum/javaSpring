@@ -32,9 +32,14 @@ public class CountryController {
 	}
 	
 	@GetMapping("/create")
-	public String createGet(ModelMap s) {
+	public String createGet(ModelMap m, HttpSession s) {
+		try {
+			s.getAttribute("person");
+			m.put("view", "/view/country/create");
+		} catch (Exception e) {
+			m.put("view", "/view/anonymous/home");
+		}
 		
-		s.put("view", "/view/country/create");
 		return"/_t/frame";
 	}
 	

@@ -1,9 +1,8 @@
 package org.pap.domain;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
@@ -27,6 +24,8 @@ public class Person {
 	
 	private String pwd;
 	
+	private LocalDate birthdate;
+	
 	@ManyToOne
 	private Country born;
 	@ManyToMany
@@ -40,10 +39,11 @@ public class Person {
 		this.hatedThings = new ArrayList<Hobby>();
 	}
 	
-	public Person(String name,String pass, String nick) {
+	public Person(String name,String pass, String nick, LocalDate birthdate) {
 		this.name=name;
 		this.nick=nick;
 		this.pwd = (new BCryptPasswordEncoder()).encode(pass);
+		this.birthdate = birthdate;
 		this.likedThings=new ArrayList<Hobby>();
 		this.hatedThings=new ArrayList<Hobby>();
 	}
@@ -78,6 +78,14 @@ public class Person {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+
+	public LocalDate getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(LocalDate birthdate) {
+		this.birthdate = birthdate;
 	}
 
 	public Country getBorn() {

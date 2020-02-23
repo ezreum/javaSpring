@@ -1,21 +1,44 @@
 <div class="container">
-<h1>List of persons that are currently in the server</h1>
+<h1 class="col-8">List of persons that are currently in the server</h1>
+
+<form>
+<input type="text" class="col-3 float-right" name="f" th:value="${f}" />
+<h1 class="float-right mr-1 ">Filter</h1>
+</form>
+
 
 <table class="table table-striped">
 <thead class="thead-light">
 <tr>
-<th class="col">person</th>
-<th>birthplace</th>
-<th>liked things</th>
-<th>hated things</th>
-<th class="col">actions</th>
+<th class="col-2">person</th>
+<th class="col">birth date</th>
+<th class="col-2">birthplace</th>
+<th class="col-3">liked things</th>
+<th class="col-3">hated things</th>
+<th class="col-2">actions</th>
 </tr>
 </thead>
 
 <tr th:each="person:${people}">
+
+<!-- <td th:utext="${#strings.replace(person.name,f,'<kbd>'+f+'</kbd>')}"></td>
+
+<td th:utext="${#strings.replace(person.born?.name,f,'<kbd>'+f+'</kbd>')}"></td>
+
+
+<td>
+<span th:block th:each="hobby:${person.likedThings}" th:utext="|${#strings.replace(hobby.name,f,'<kbd>'+f+'</kbd>')} |"></span>
+</td>
+
+<td>
+<span th:block th:each="hobby:${person.hatedThings}" th:utext="|${#strings.replace(hobby.name,f,'<kbd>'+f+'</kbd>')} |"></span>
+</td> -->
+
 <td th:text="${person.name}"></td>
 
-<td th:text="${person.born.name}"></td>
+<td th:text="${#temporals.format(person.birthdate, 'dd-MM-yyyy')}"></td>
+
+<td th:text="${person.born?.name}"></td>
 
 
 <td>
