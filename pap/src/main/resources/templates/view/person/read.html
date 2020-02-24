@@ -21,9 +21,9 @@
 
 <tr th:each="person:${people}">
 
-<!-- <td th:utext="${#strings.replace(person.name,f,'<kbd>'+f+'</kbd>')}"></td>
+<td th:utext="${#strings.replace(person.name,f,'<kbd>'+f+'</kbd>')}"></td>
 
-<td th:utext="${#strings.replace(person.born?.name,f,'<kbd>'+f+'</kbd>')}"></td>
+<!-- <td th:utext="${#strings.replace(person.born?.name,f,'<kbd>'+f+'</kbd>')}"></td>
 
 
 <td>
@@ -34,7 +34,7 @@
 <span th:block th:each="hobby:${person.hatedThings}" th:utext="|${#strings.replace(hobby.name,f,'<kbd>'+f+'</kbd>')} |"></span>
 </td> -->
 
-<td th:text="${person.name}"></td>
+<!-- <td th:text="${person.name}"></td>-->
 
 <td th:text="${#temporals.format(person.birthdate, 'dd-MM-yyyy')}"></td>
 

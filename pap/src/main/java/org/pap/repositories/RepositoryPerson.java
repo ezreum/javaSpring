@@ -13,4 +13,6 @@ public interface RepositoryPerson extends JpaRepository<Person, Long>{
 	
 	//public List<Person> findByNameOrderByNameDesc(String f);
 	
+	//public List<Person> findAllByOrderByNameAsc();
+	
 }
