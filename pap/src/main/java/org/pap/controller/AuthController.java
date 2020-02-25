@@ -2,6 +2,8 @@ package org.pap.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.pap.exceptions.DangerException;
+import org.pap.helper.RolHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthController {
 
 	@GetMapping("/logout")
-	public String logout(HttpSession s) {
+	public String logout(HttpSession s) throws DangerException {
+		RolHelper.isRolOK("authenticated", s);
 		s.invalidate();
 		return "redirect:/";
 	}

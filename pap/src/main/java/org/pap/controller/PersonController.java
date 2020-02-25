@@ -1,7 +1,6 @@
 package org.pap.controller;
 
 
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +12,11 @@ import org.apache.catalina.connector.Response;
 import org.pap.domain.Country;
 import org.pap.domain.Hobby;
 import org.pap.domain.Person;
+import org.pap.exceptions.DangerException;
+import org.pap.exceptions.InfoException;
 import org.pap.helper.H;
+import org.pap.helper.PRG;
+import org.pap.helper.RolHelper;
 import org.pap.repositories.RepositoryCountry;
 import org.pap.repositories.RepositoryHobby;
 import org.pap.repositories.RepositoryPerson;
@@ -49,7 +52,8 @@ public class PersonController {
 	}
 	
 	@GetMapping("/create")
-	public String create(ModelMap m) {
+	public String create(ModelMap m, HttpSession s) throws DangerException {
+		RolHelper.isRolOK("auth", s);
 		List<Country> country = repoCountry.findAll();
 		m.put("countries", country);
 		List<Hobby> hobbies= repoHobby.findAll();
@@ -60,7 +64,7 @@ public class PersonController {
 	}
 	
 	@PostMapping("/create")
-	public String create(
+	public void create(
 			@RequestParam("name")String name,
 			@RequestParam("nick")String nick,
 			@RequestParam("password")String pwd,
@@ -72,7 +76,7 @@ public class PersonController {
 			@RequestParam(value = "hatedHobbies[]", required=false)List<Long> hatedHobbies,
 			HttpSession s,
 			ModelMap m
-			) {
+			) throws DangerException, InfoException {
 		String route="/person";
 		
 		
@@ -99,28 +103,28 @@ public class PersonController {
 			
 			repoPerson.save(person);
 			
-			H.info(s, "person named "+name+" has been successfully created", "success", route);
 		} catch (Exception e) {
-			H.info(s, "person named "+name+" hasn't been properly created", "danger", route);
+			PRG.error("person named "+name+" hasn't been properly created", route);
 		}
-		return "redirect:/info";
+		PRG.info("person named "+name+" has been successfully created", route);
 	}
 	
 	
 	@GetMapping("/update")
 	public String update(
 			@RequestParam("id")Long id,
-			ModelMap s) {
-		s.put("person", repoPerson.getOne(id));
-		s.put("countries", repoCountry.findAll());
-		s.put("hobbies", repoHobby.findAll());
+			ModelMap m, HttpSession s) throws DangerException {
+		RolHelper.isRolOK("auth", s);
+		m.put("person", repoPerson.getOne(id));
+		m.put("countries", repoCountry.findAll());
+		m.put("hobbies", repoHobby.findAll());
 		
-		s.put("view", "/view/person/update");
+		m.put("view", "/view/person/update");
 		return "_t/frame";
 	}
 	
 	@PostMapping("/update")
-	public String updatePostBorr(
+	public void updatePostBorr(
 			@RequestParam("id")Long id,
 			@RequestParam("name")String name,
 			@RequestParam(value="birthdate", required=false)
@@ -130,7 +134,7 @@ public class PersonController {
 			@RequestParam(value="likedHobbies[]", required=false) List<Long> liked,
 			@RequestParam(value="hatedHobbies[]", required=false) List<Long> hated,
 			HttpSession s
-			) {
+			) throws DangerException, InfoException {
 		try {
 			liked = (liked == null ? new ArrayList<Long>() : liked);
 			hated = (hated == null ? new ArrayList<Long>() : hated);
@@ -175,28 +179,28 @@ public class PersonController {
 			
 			repoPerson.save(person);
 			
-			H.info(s, "El usuario "+name+" se ha modificado correctamente", "success", "/person");
+			
 			
 		} catch (Exception e) {
-			H.info(s, "El usuario "+name+" no se ha modificado correctamente", "warning", "/person");
+			PRG.error("El usuario "+name+" no se ha modificado correctamente", "/person");
 		}
-		return "redirect:/info";
+		PRG.info("El usuario "+name+" se ha modificado correctamente", "/person");
 	}
 	
 	@PostMapping("/delete")
-	public String delete(
+	public void delete(
 			@RequestParam("id")Long id,
 			HttpSession s
-			) {
+			) throws DangerException, InfoException {
+		RolHelper.isRolOK("auth", s);
 		Person person = repoPerson.getOne(id);
 		String name = person.getName();
 		try {
 			repoPerson.delete(person);
-			H.info(s, "person named "+name+" has been sucessfully erased", "success", "/person" );
 		} catch (Exception e) {
-			H.info(s, "person named "+name+" has been sucessfully erased", "success", "/person");
+			PRG.error("person named "+name+" has been sucessfully erased", "/person");
 		}
-		return "redirect:/info";
+		PRG.info("person named "+name+" has been sucessfully erased", "/person" );
 	}
 	
 	

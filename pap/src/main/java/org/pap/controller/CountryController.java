@@ -5,7 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.pap.domain.Country;
+import org.pap.exceptions.DangerException;
+import org.pap.exceptions.InfoException;
 import org.pap.helper.H;
+import org.pap.helper.PRG;
+import org.pap.helper.RolHelper;
 import org.pap.repositories.RepositoryCountry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +38,7 @@ public class CountryController {
 	@GetMapping("/create")
 	public String createGet(ModelMap m, HttpSession s) {
 		try {
+			RolHelper.isRolOK("auth", s);
 			s.getAttribute("person");
 			m.put("view", "/view/country/create");
 		} catch (Exception e) {
@@ -44,22 +49,22 @@ public class CountryController {
 	}
 	
 	@PostMapping("/create")
-	public String createPost(
-			@RequestParam("name")String name, HttpSession s) {
+	public void createPost(
+			@RequestParam("name")String name, HttpSession s) throws DangerException, InfoException {
 		try {
 			repoCountry.save(new Country(name));
-			H.info(s, "Country "+name+" created correctly", "info", "/country");
 		} catch (Exception e) {
-			H.info(s, "Country "+name+" duplicated", "danger", "/country");
+			PRG.error(name+" is duplicated", "/country/create");
 		}
-		
-		return "redirect:/info";
+		PRG.info(name+" has been sucessfully created", "/country");
 	}
 	
 	@GetMapping("/update")
 	public String update(
 			@RequestParam("id")Long id,
-			ModelMap m) {
+			ModelMap m,
+			HttpSession s) throws DangerException {
+		RolHelper.isRolOK("auth", s);
 		Country country = repoCountry.getOne(id);
 		m.put("country", country);
 		
@@ -68,36 +73,36 @@ public class CountryController {
 	}
 	
 	@PostMapping("/update")
-	public String update(
+	public void update(
 			@RequestParam("name")String name,
 			@RequestParam("id")Long id,
 			ModelMap m,
-			HttpSession s) {
+			HttpSession s) throws DangerException, InfoException {
 			Country country = repoCountry.getOne(id);	
 			try {
 				country.setName(name);
 				repoCountry.save(country);
-			H.info(s, "country "+name+" has been updated", "success", "/country");
+			
 			} catch (Exception e) {
-			H.info(s, "The selected country "+name+" hasn't been sucessfully updated", "danger", "/country");	
+			PRG.error("The selected country "+name+" hasn't been sucessfully updated", "/country");	
 			}
-			return "redirect:/info";
+			PRG.info("country "+name+" has been updated", "/country");
 	}
 	
 	
 	@PostMapping("/delete")
-	public String Delete(@RequestParam("id")Long identifier, HttpSession s) {
+	public void Delete(@RequestParam("id")Long identifier, HttpSession s) throws DangerException, InfoException {
+		RolHelper.isRolOK("auth", s);
 		Country country = repoCountry.getOne(identifier);
 		String name = country.getName();
 		try {
 			if (identifier!=null) {
 		repoCountry.delete(country);
-		H.info(s, "Country "+name+" deleted correctly", "info", "/country");
 		}
 		} catch (Exception e) {
-			H.info(s, "Error deliting country "+name, "danger", "/country/create");
+			PRG.error(name+" has not been deleted", "/country/create");
 		}
-		return "redirect:/info";
+		PRG.info("Country "+name+" deleted correctly", "/country");
 	}
 
 }

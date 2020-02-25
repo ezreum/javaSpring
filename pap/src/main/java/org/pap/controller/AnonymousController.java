@@ -1,6 +1,7 @@
 package org.pap.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 
 import org.pap.domain.Person;
+import org.pap.exceptions.DangerException;
 import org.pap.helper.H;
+import org.pap.helper.PRG;
+import org.pap.helper.RolHelper;
 import org.pap.repositories.RepositoryCountry;
 import org.pap.repositories.RepositoryHobby;
 import org.pap.repositories.RepositoryPerson;
@@ -31,10 +35,10 @@ public class AnonymousController {
 	private RepositoryPerson repoPerson;
 
 	@Autowired
-	private RepositoryCountry repoPais;
+	private RepositoryCountry repoCountry;
 
 	@Autowired
-	private RepositoryHobby repoAficion;
+	private RepositoryHobby repoHobby;
 
 	// ===============================================
 
@@ -46,16 +50,16 @@ public class AnonymousController {
 
 	@GetMapping("/info")
 	public String info(HttpSession s, ModelMap m) {
-		String mensaje = s.getAttribute("mensaje") != null ? (String) s.getAttribute("mensaje")
-				: "Pulsa para volver a home";
-		String severity = s.getAttribute("severity") != null ? (String) s.getAttribute("severity") : "info";
-		String link = s.getAttribute("link") != null ? (String) s.getAttribute("link") : "/";
+		String mensaje = s.getAttribute("_text") != null ? (String) s.getAttribute("_text")
+				: "Go back home";
+		String severity = s.getAttribute("_severity") != null ? (String) s.getAttribute("_severity") : "info";
+		String link = s.getAttribute("_link") != null ? (String) s.getAttribute("_link") : "/";
 
-		s.removeAttribute("mensaje");
-		s.removeAttribute("severity");
-		s.removeAttribute("link");
+		s.removeAttribute("_text");
+		s.removeAttribute("_severity");
+		s.removeAttribute("_link");
 
-		m.put("mensaje", mensaje);
+		m.put("text", mensaje);
 		m.put("severity", severity);
 		m.put("link", link);
 
@@ -76,6 +80,7 @@ public class AnonymousController {
 			@RequestParam("pwd")String pwd,
 			HttpSession s
 			) throws Exception {
+		RolHelper.isRolOK("anonymous", s);
 		String route = "/";
 		Person person = repoPerson.findByNick(nick);
 		try {
@@ -85,14 +90,38 @@ public class AnonymousController {
 			s.setAttribute("person", person);
 			
 		}catch (EntityNotFoundException e) {
-			H.info(s, e.getMessage(), "warning", "/login");
-			route="/info";
+			PRG.error(e.getMessage(), "/login");
 		}
-		
-		
 		return "redirect:"+route;
 	}
 
+	@GetMapping("/init")
+	public String init(ModelMap m) throws DangerException {
+		if (repoPerson.findByNick("admin") != null) {
+			PRG.error("BD no vacía");
+		}
+		m.put("view", "/view/anonymous/init");
+		
+		
+		return "/_t/frame";
+	}
 	
+	@PostMapping("/init")
+	public String init(@RequestParam("pwd")String pwd,
+			ModelMap m
+			) throws DangerException {
+		if (repoPerson.findByNick("admin") != null) {
+			PRG.error("incorrect mapping. BD is not empty");
+		}
+		BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
+		if (!bpe.matches(pwd, bpe.encode(pwd))) { // Password harcoded
+			PRG.error("Password incorrecta","/init");
+		}
+		repoPerson.deleteAll();
+		repoCountry.deleteAll();
+		repoHobby.deleteAll();
+		repoPerson.save(new Person("Administrator",pwd,"admin",LocalDate.now()));
+		return "redirect:/";
+	}
 	
 }
